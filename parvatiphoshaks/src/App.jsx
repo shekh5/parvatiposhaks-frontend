@@ -1,120 +1,57 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { BrowserRouter, Route, Routes } from "react-router-dom"
+import { Home } from "./Pages/Home.jsx"
+import ProductDetails from "./Pages/ProductDetails.jsx"
+import Products from "./Pages/Products.jsx"
+import Register from "./User/Register.jsx"
+import Login from "./User/Login.jsx"
+import ForgetPassword from "./User/ForgetPassword.jsx"
+import { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { loadUser } from "./features/user/userSlice.js"
+import UserDashboard from "./User/UserDashboard.jsx"
+import Profile from "./User/Profile.jsx"
+import UpdateProfile from "./User/UpdateProfile.jsx"
+import UpdatePassword from "./User/UpdatePassword.jsx"
+import ProtectedRoute from "./components/ProtectedRoute.jsx"
+import ResetPassword from "./User/ResetPassword.jsx"
+import Cart from "./cart/Cart.jsx"
+import Shipping from "./cart/Shipping.jsx"
+
 
 function App() {
-  const [count, setCount] = useState(0)
-
+  const {isAuthenticated,user} = useSelector((state)=>state.user)
+  const dispatch = useDispatch();
+  
+  useEffect(()=>{
+    if(isAuthenticated && user ){
+      dispatch(loadUser());
+    }
+  },[dispatch]);
+  console.log("app level auth status",isAuthenticated)
+  console.log("app level user data",user)
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />}></Route>
+          <Route path="/products/product/:id" element={<ProductDetails />}></Route>
+          <Route path="/product/:id" element={<ProductDetails />}></Route>
+          <Route path="/products" element={<Products />}></Route>
+          <Route path="/products/:keyword" element={<Products />}></Route>
+          <Route path="/user/register" element={<Register />}></Route>
+          <Route path="/user/login" element={<Login />}></Route>
+          <Route path="/user/forgot-password" element={<ForgetPassword />}></Route>
+          <Route path="/profile" element={<ProtectedRoute element={<Profile />} />}></Route>
+          <Route path="/profile/update" element={<ProtectedRoute element={<UpdateProfile />} />}></Route>
+          <Route path="/password/update" element={<ProtectedRoute element={<UpdatePassword />} />}></Route>
+          <Route path="/reset/:token" element={<ResetPassword/>}></Route>
+          <Route path="/cart" element={<Cart/>}></Route>
+          <Route path="/shipping" element={<ProtectedRoute element={<Shipping />} />}></Route>
+        </Routes>
+        {isAuthenticated && <UserDashboard user={user}/> }
+      </BrowserRouter>
     </>
+
   )
 }
 
