@@ -8,6 +8,7 @@ import { Navbar } from "../components/Navbar.jsx"
 import { Footer } from "../components/Footer.jsx"
 import CheckoutPath from "./CheckoutPath.jsx"
 import { saveShippingInfo } from "../features/cart/cartSlice.js"
+import { Country, State, City } from 'country-state-city'
 
 const Shipping = () => {
     const dispatch = useDispatch()
@@ -77,25 +78,15 @@ const Shipping = () => {
                         </div>
                         <div className="shipping-form-group">
                             <label htmlFor="city">City</label>
-                            <input
-                                type="text"
-                                id="city"
-                                placeholder="Enter City"
-                                value={city}
-                                onChange={(e) => setCity(e.target.value)}
-                                required
-                            />
+                            <select name="city" id="city" value={city} onChange={(e) => setCity(e.target.value)}>
+                                {City && City.getCitiesOfState(country, state).map((item) => (<option value={item.name} key={item.name}>{item.name}</option>))}
+                            </select>
                         </div>
                         <div className="shipping-form-group">
                             <label htmlFor="state">State</label>
-                            <input
-                                type="text"
-                                id="state"
-                                placeholder="Enter State"
-                                value={state}
-                                onChange={(e) => setState(e.target.value)}
-                                required
-                            />
+                            <select name="state" id="state" value={state} onChange={(e) => setState(e.target.value)}>
+                                {State && State.getStatesOfCountry(country).map((item) => (<option value={item.isoCode} key={item.isoCode}>{item.name}</option>))}
+                            </select>
                         </div>
                     </div>
 
@@ -105,11 +96,15 @@ const Shipping = () => {
                             <select
                                 id="country"
                                 value={country}
-                                onChange={(e) => setCountry(e.target.value)}
+                                onChange={(e) =>{ setCountry(e.target.value)
+                                    setCity("")
+                                    setState("")
+                                }
+                                }
                                 required
                             >
                                 <option value="">Select Country</option>
-                                <option value="India">India</option>
+                                {Country && Country.getAllCountries().map((item) => (<option value={item.isoCode}>{item.name}</option>))}
                             </select>
                         </div>
                         <div className="shipping-form-group">

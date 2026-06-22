@@ -16,6 +16,9 @@ import ProtectedRoute from "./components/ProtectedRoute.jsx"
 import ResetPassword from "./User/ResetPassword.jsx"
 import Cart from "./cart/Cart.jsx"
 import Shipping from "./cart/Shipping.jsx"
+import OrderConfirm from "./cart/OrderConfirm.jsx"
+import Payment from "./cart/Payment.jsx"
+import PaymentSuccess from "./cart/PaymentSuccess.jsx"
 
 
 function App() {
@@ -47,6 +50,9 @@ function App() {
           <Route path="/reset/:token" element={<ResetPassword/>}></Route>
           <Route path="/cart" element={<Cart/>}></Route>
           <Route path="/shipping" element={<ProtectedRoute element={<Shipping />} />}></Route>
+          <Route path="/order/confirm" element={<ProtectedRoute element={<OrderConfirm />} />}></Route>
+          <Route path="/process/payment" element={<ProtectedRoute element={<Payment />} />}></Route>
+          <Route path="/success" element={<ProtectedRoute element={<PaymentSuccess />} />}></Route>
         </Routes>
         {isAuthenticated && <UserDashboard user={user}/> }
       </BrowserRouter>

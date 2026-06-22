@@ -1,4 +1,4 @@
-import {createSlice, createAsyncThunk} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const getErrorMessage = (error, fallbackMessage) => {
@@ -10,63 +10,63 @@ const getErrorMessage = (error, fallbackMessage) => {
 
 
 //register Api
-export const registerUser = createAsyncThunk("user/register", async(userData,{rejectWithValue})=>{
+export const registerUser = createAsyncThunk("user/register", async (userData, { rejectWithValue }) => {
     try {
         const config = {
-            headers:{
-                "Content-Type":"multipart/form-data"
+            headers: {
+                "Content-Type": "multipart/form-data"
             }
         }
 
-        const {data} =await axios.post('/api/v1/signup', userData, config)
+        const { data } = await axios.post('/api/v1/signup', userData, config)
         console.log("registration data", data);
         return data
-        
+
     } catch (error) {
         const errorMsg = getErrorMessage(error, "registration failed. Please try again.")
         return rejectWithValue({ message: errorMsg })
     }
 })
 
-export const loginUser = createAsyncThunk("user/login", async({email, password},{rejectWithValue})=>{
+export const loginUser = createAsyncThunk("user/login", async ({ email, password }, { rejectWithValue }) => {
     try {
         const config = {
-            headers:{
-                "Content-Type":"application/json"
+            headers: {
+                "Content-Type": "application/json"
             }
         }
 
-        const {data} =await axios.post('/api/v1/SignIn', {email, password}, config)
+        const { data } = await axios.post('/api/v1/SignIn', { email, password }, config)
         console.log("login data", data);
         return data
-        
+
     } catch (error) {
         const errorMsg = getErrorMessage(error, "login failed. Please try again.")
         return rejectWithValue({ message: errorMsg })
     }
 })
 
-export const forgotPassword = createAsyncThunk("user/forgotPassword", async({email},{rejectWithValue})=>{
+export const forgotPassword = createAsyncThunk("user/forgotPassword", async ({ email }, { rejectWithValue }) => {
     try {
         const config = {
-            headers:{
-                "Content-Type":"application/json"
+            headers: {
+                "Content-Type": "application/json"
             }
         }
 
-        const {data} =await axios.post('/api/v1/password/forgot', {email}, config)
+        const { data } = await axios.post('/api/v1/password/forgot', { email }, config)
         console.log("forgot password data", data);
         return data
-        
+
     } catch (error) {
         const errorMsg = getErrorMessage(error, "Something went wrong. Please try again.")
         return rejectWithValue({ message: errorMsg })
     }
 })
 
-export const loadUser = createAsyncThunk("user/loadUser", async(_, {rejectWithValue})=>{
+export const loadUser = createAsyncThunk("user/loadUser", async (_, { rejectWithValue }) => {
     try {
-        const {data} = await axios.get("/api/v1/profile")
+        const { data } = await axios.get("/api/v1/profile")
         return data
     } catch (error) {
         const errorMsg = getErrorMessage(error, "Failed to load user data. Please try again.")
@@ -74,9 +74,9 @@ export const loadUser = createAsyncThunk("user/loadUser", async(_, {rejectWithVa
     }
 })
 
-export const logoutUser = createAsyncThunk("user/logout", async(_, {rejectWithValue})=>{
+export const logoutUser = createAsyncThunk("user/logout", async (_, { rejectWithValue }) => {
     try {
-        const {data} = await axios.post("/api/v1/logout")
+        const { data } = await axios.post("/api/v1/logout")
         return data
     } catch (error) {
         const errorMsg = getErrorMessage(error, "Logout failed. Please try again.")
@@ -84,51 +84,51 @@ export const logoutUser = createAsyncThunk("user/logout", async(_, {rejectWithVa
     }
 })
 
-export const updateProfile = createAsyncThunk("user/updateProfile", async(userData,{rejectWithValue})=>{
+export const updateProfile = createAsyncThunk("user/updateProfile", async (userData, { rejectWithValue }) => {
     try {
         const config = {
-            headers:{
-                "Content-Type":"application/json"
+            headers: {
+                "Content-Type": "application/json"
             }
         }
 
-        const {data} = await axios.post('/api/v1/profile/update', userData, config)
+        const { data } = await axios.post('/api/v1/profile/update', userData, config)
         return data
-        
+
     } catch (error) {
         const errorMsg = getErrorMessage(error, "Failed to update profile. Please try again.")
         return rejectWithValue({ message: errorMsg })
     }
 })
 
-export const updatePassword = createAsyncThunk("user/updatePassword", async(passwords,{rejectWithValue})=>{
+export const updatePassword = createAsyncThunk("user/updatePassword", async (passwords, { rejectWithValue }) => {
     try {
         const config = {
-            headers:{
-                "Content-Type":"application/json"
+            headers: {
+                "Content-Type": "application/json"
             }
         }
 
-        const {data} = await axios.post('/api/v1/password/update', passwords, config)
+        const { data } = await axios.post('/api/v1/password/update', passwords, config)
         return data
-        
+
     } catch (error) {
         const errorMsg = getErrorMessage(error, "Failed to update password. Please try again.")
         return rejectWithValue({ message: errorMsg })
     }
 })
 
-export const resetPassword = createAsyncThunk("user/resetPassword", async({token, passwords},{rejectWithValue})=>{
+export const resetPassword = createAsyncThunk("user/resetPassword", async ({ token, passwords }, { rejectWithValue }) => {
     try {
         const config = {
-            headers:{
-                "Content-Type":"application/json"
+            headers: {
+                "Content-Type": "application/json"
             }
         }
 
-        const {data} = await axios.post(`/api/v1/password/reset/${token}`, passwords, config)
+        const { data } = await axios.post(`/api/v1/password/reset/${token}`, passwords, config)
         return data
-        
+
     } catch (error) {
         const errorMsg = getErrorMessage(error, "Failed to reset password. Please try again.")
         return rejectWithValue({ message: errorMsg })
@@ -137,162 +137,184 @@ export const resetPassword = createAsyncThunk("user/resetPassword", async({token
 
 
 const userSlice = createSlice({
-    name:"user",
-    initialState:{
-        user:null,
-        loading:false,
-        error:null,
-        success:false,
-        isAuthenticated:false
+    name: "user",
+    initialState: {
+        user: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null,
+        loading: false,
+        error: null,
+        success: false,
+        isAuthenticated: localStorage.getItem('isAuthenticated') === 'true',
+        message: null
     },
-    reducers:{
-        removeErrors:(state)=>{
+    reducers: {
+        removeErrors: (state) => {
             state.error = null
         },
-        removeSuccess:(state)=>{
+        removeSuccess: (state) => {
             state.success = false
         }
     },
-    extraReducers: (builder)=>{
-        builder.addCase(registerUser.pending,(state)=>{
+    extraReducers: (builder) => {
+        builder.addCase(registerUser.pending, (state) => {
             state.loading = true
             state.error = null
         })
-        .addCase(registerUser.fulfilled,(state,action)=>{
-            state.loading = false
-            state.user = action.payload?.user || action.payload?.data || null
-            state.success = action.payload.success
-            state.error = null
-            state.isAuthenticated = Boolean(state.user)
-        })
-        .addCase(registerUser.rejected,(state,action)=>{
-            state.loading = false
-            state.error = action.payload?.message || "registration failed. Please try again."
-            state.user = null
-            state.isAuthenticated = false
-        })
+            .addCase(registerUser.fulfilled, (state, action) => {
+                state.loading = false
+                state.user = action.payload?.user || action.payload?.data || null
+                state.success = action.payload.success
+                state.error = null
+                state.isAuthenticated = Boolean(state.user)
+
+                //Store in localStorage
+                localStorage.setItem('user', JSON.stringify(state.user))
+                localStorage.setItem('isAuthenticated', JSON.stringify(state.user))
+            })
+            .addCase(registerUser.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload?.message || "registration failed. Please try again."
+                state.user = null
+                state.isAuthenticated = false
+            })
 
 
 
-        builder.addCase(loginUser.pending,(state)=>{
+        builder.addCase(loginUser.pending, (state) => {
             state.loading = true
             state.error = null
         })
-        .addCase(loginUser.fulfilled,(state,action)=>{
-            state.loading = false
-            state.user = action.payload?.user || null
-            state.success = action.payload.success
-            state.error = null
-            state.isAuthenticated = Boolean(action.payload?.user)
-            console.log("user after login", state.user)
-        })
-        .addCase(loginUser.rejected,(state,action)=>{
-            state.loading = false
-            state.error = action.payload?.message || "login failed. Please try again."
-            state.user = null
-            state.isAuthenticated = false
-        })
+            .addCase(loginUser.fulfilled, (state, action) => {
+                state.loading = false
+                state.user = action.payload?.user || null
+                state.success = action.payload.success
+                state.error = null
+                state.isAuthenticated = Boolean(action.payload?.user)
+                console.log("user after login", state.user)
+
+                //Store in localStorage
+                localStorage.setItem('user', JSON.stringify(state.user))
+                localStorage.setItem('isAuthenticated', JSON.stringify(state.user))
+            
+            })
+            .addCase(loginUser.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload?.message || "login failed. Please try again."
+                state.user = null
+                state.isAuthenticated = false
+            })
 
 
 
-        builder.addCase(forgotPassword.pending,(state)=>{
+        builder.addCase(forgotPassword.pending, (state) => {
             state.loading = true
             state.error = null
         })
-        .addCase(forgotPassword.fulfilled,(state,action)=>{
-            state.loading = false
-            state.data = action.payload?.data || null
-            state.success = action.payload.success
-            state.error = null
-            state.isAuthenticated = Boolean(action.payload?.user)
-            console.log("auth status",state.isAuthenticated)
-            console.log("user after login", state.user)
-        })
-        .addCase(forgotPassword.rejected,(state,action)=>{
-            state.loading = false
-            state.error = action.payload?.message || "Something went wrong. Please try again."
-        })
+            .addCase(forgotPassword.fulfilled, (state, action) => {
+                state.loading = false
+                state.data = action.payload?.data || null
+                state.success = action.payload.success
+                state.error = null
+                state.isAuthenticated = Boolean(action.payload?.user)
+                console.log("auth status", state.isAuthenticated)
+                console.log("user after login", state.user)
+            })
+            .addCase(forgotPassword.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload?.message || "Something went wrong. Please try again."
+            })
 
 
-        builder.addCase(loadUser.pending,(state)=>{
+        builder.addCase(loadUser.pending, (state) => {
             state.loading = true
             state.error = null
         })
-        .addCase(loadUser.fulfilled,(state,action)=>{
-            state.loading = false
-            state.user = action.payload?.user || null
-            state.isAuthenticated = Boolean(action.payload?.user)
-        })
-        .addCase(loadUser.rejected,(state,action)=>{
-            state.loading = false
-            state.error = action.payload?.message || "Failed to load user data. Please try again."
-            state.user = null
-            state.isAuthenticated = false
-        })
+            .addCase(loadUser.fulfilled, (state, action) => {
+                state.loading = false
+                state.user = action.payload?.user || null
+                state.isAuthenticated = Boolean(action.payload?.user)
+            })
+            .addCase(loadUser.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload?.message || "Failed to load user data. Please try again."
+                state.user = null
+                state.isAuthenticated = false
+
+                if (action.payload?.statusCode === 401) {
+                    state.user = null;
+                    state.isAuthenticated = false;
+                    localStorage.removeItem('user')
+                    localStorage.removeItem('isAuthenticated')
+                }
+            })
 
 
-        builder.addCase(logoutUser.pending,(state)=>{
+        builder.addCase(logoutUser.pending, (state) => {
             state.loading = true
             state.error = null
         })
-        .addCase(logoutUser.fulfilled,(state,action)=>{
-            state.loading = false
-            state.user = null
-            state.isAuthenticated = false
-            state.success = action.payload.success
-        })
-        .addCase(logoutUser.rejected,(state,action)=>{
-            state.loading = false
-            state.error = action.payload?.message || "Logout failed. Please try again."
-        })
+            .addCase(logoutUser.fulfilled, (state, action) => {
+                state.loading = false
+                state.user = null
+                state.isAuthenticated = false
+                state.success = action.payload.success
 
-        builder.addCase(updateProfile.pending,(state)=>{
+                localStorage.removeItem('user')
+                localStorage.removeItem('isAuthenticated')
+            })
+            .addCase(logoutUser.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload?.message || "Logout failed. Please try again."
+
+
+            })
+
+        builder.addCase(updateProfile.pending, (state) => {
             state.loading = true
             state.error = null
         })
-        .addCase(updateProfile.fulfilled,(state,action)=>{
-            state.loading = false
-            state.user = action.payload?.data || null
-            state.success = action.payload?.success || false
-            state.error = null
-        })
-        .addCase(updateProfile.rejected,(state,action)=>{
-            state.loading = false
-            state.error = action.payload?.message || "Failed to update profile. Please try again."
-        })
+            .addCase(updateProfile.fulfilled, (state, action) => {
+                state.loading = false
+                state.user = action.payload?.data || null
+                state.success = action.payload?.success || false
+                state.error = null
+            })
+            .addCase(updateProfile.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload?.message || "Failed to update profile. Please try again."
+            })
 
-        builder.addCase(updatePassword.pending,(state)=>{
+        builder.addCase(updatePassword.pending, (state) => {
             state.loading = true
             state.error = null
         })
-        .addCase(updatePassword.fulfilled,(state,action)=>{
-            state.loading = false
-            state.user = action.payload?.user || null
-            state.success = action.payload?.success || false
-            state.error = null
-        })
-        .addCase(updatePassword.rejected,(state,action)=>{
-            state.loading = false
-            state.error = action.payload?.message || "Failed to update password. Please try again."
-        })
+            .addCase(updatePassword.fulfilled, (state, action) => {
+                state.loading = false
+                state.user = action.payload?.user || null
+                state.success = action.payload?.success || false
+                state.error = null
+            })
+            .addCase(updatePassword.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload?.message || "Failed to update password. Please try again."
+            })
 
-        builder.addCase(resetPassword.pending,(state)=>{
+        builder.addCase(resetPassword.pending, (state) => {
             state.loading = true
             state.error = null
         })
-        .addCase(resetPassword.fulfilled,(state,action)=>{
-            state.loading = false
-            state.user = action.payload?.user || null
-            state.success = action.payload?.success || false
-            state.error = null
-            state.isAuthenticated = Boolean(action.payload?.user)
-        })
-        .addCase(resetPassword.rejected,(state,action)=>{
-            state.loading = false
-            state.error = action.payload?.message || "Failed to reset password. Please try again."
-        })
+            .addCase(resetPassword.fulfilled, (state, action) => {
+                state.loading = false
+                state.user = action.payload?.user || null
+                state.success = action.payload?.success || false
+                state.error = null
+                state.isAuthenticated = Boolean(action.payload?.user)
+            })
+            .addCase(resetPassword.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload?.message || "Failed to reset password. Please try again."
+            })
     }
 })
 
-export const {removeErrors, removeSuccess} = userSlice.actions
+export const { removeErrors, removeSuccess } = userSlice.actions
 export default userSlice.reducer; 
