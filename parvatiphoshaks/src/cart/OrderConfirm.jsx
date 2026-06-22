@@ -1,29 +1,29 @@
-import React, { useEffect } from "react"
-import "../CartStyles/OrderConfirm.css"
-import { PageTitle } from "../components/PageTitle.jsx"
-import { Navbar } from "../components/Navbar.jsx"
-import { Footer } from "../components/Footer.jsx"
-import CheckoutPath from "./CheckoutPath.jsx"
-import { useSelector } from "react-redux"
-import { Link, useNavigate } from "react-router-dom"
+import React, { useEffect } from 'react';
+import '../CartStyles/OrderConfirm.css';
+import { PageTitle } from '../components/PageTitle.jsx';
+import { Navbar } from '../components/Navbar.jsx';
+import { Footer } from '../components/Footer.jsx';
+import CheckoutPath from './CheckoutPath.jsx';
+import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
 
 const OrderConfirm = () => {
-  const navigate = useNavigate()
-  const { user } = useSelector((state) => state.user)
-  const { cartItems, shippingInfo } = useSelector((state) => state.cart)
+  const navigate = useNavigate();
+  const { user } = useSelector((state) => state.user);
+  const { cartItems, shippingInfo } = useSelector((state) => state.cart);
 
   useEffect(() => {
     if (!shippingInfo || !shippingInfo.address) {
-      navigate("/shipping")
+      navigate('/shipping');
     } else if (cartItems.length === 0) {
-      navigate("/cart")
+      navigate('/cart');
     }
-  }, [shippingInfo, cartItems, navigate])
+  }, [shippingInfo, cartItems, navigate]);
 
-  const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0)
-  const tax = Math.round(subtotal * 0.18)
-  const shippingCharges = subtotal > 1000 ? 0 : (subtotal > 0 ? 100 : 0)
-  const totalPrice = subtotal + tax + shippingCharges
+  const subtotal = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const tax = Math.round(subtotal * 0.18);
+  const shippingCharges = subtotal > 1000 ? 0 : subtotal > 0 ? 100 : 0;
+  const totalPrice = subtotal + tax + shippingCharges;
 
   const proceedToPayment = () => {
     const data = {
@@ -31,14 +31,14 @@ const OrderConfirm = () => {
       shippingCharges,
       tax,
       totalPrice,
-    }
-    sessionStorage.setItem("orderInfo", JSON.stringify(data))
-    navigate("/process/payment")
-  }
+    };
+    sessionStorage.setItem('orderInfo', JSON.stringify(data));
+    navigate('/process/payment');
+  };
 
   // Render nothing if shipping info or cart items are empty before navigate completes
   if (!shippingInfo || !shippingInfo.address || cartItems.length === 0) {
-    return null
+    return null;
   }
 
   return (
@@ -82,11 +82,7 @@ const OrderConfirm = () => {
               {cartItems.map((item) => (
                 <tr key={item.product}>
                   <td>
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="order-product-image"
-                    />
+                    <img src={item.image} alt={item.name} className="order-product-image" />
                   </td>
                   <td>
                     <Link to={`/product/${item.product}`}>{item.name}</Link>
@@ -112,7 +108,7 @@ const OrderConfirm = () => {
               </tr>
               <tr>
                 <th>Shipping Charges</th>
-                <td>{shippingCharges === 0 ? "Free" : `₹${shippingCharges}`}</td>
+                <td>{shippingCharges === 0 ? 'Free' : `₹${shippingCharges}`}</td>
               </tr>
               <tr>
                 <th>Gross Total</th>
@@ -131,7 +127,7 @@ const OrderConfirm = () => {
 
       <Footer />
     </>
-  )
-}
+  );
+};
 
-export default OrderConfirm
+export default OrderConfirm;

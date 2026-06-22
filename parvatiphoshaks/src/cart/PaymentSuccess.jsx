@@ -1,7 +1,7 @@
-import React from "react"
-import "../CartStyles/PaymentSuccess.css"
-import { Link } from "react-router-dom"
-import { PageTitle } from "../components/PageTitle.jsx"
+import React from 'react';
+import '../CartStyles/PaymentSuccess.css';
+import { Link } from 'react-router-dom';
+import { PageTitle } from '../components/PageTitle.jsx';
 
 const PaymentSuccess = () => {
   return (
@@ -22,7 +22,7 @@ const PaymentSuccess = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default PaymentSuccess
+export default PaymentSuccess;
