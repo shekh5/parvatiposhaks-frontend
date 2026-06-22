@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-blue: #0A2463;     /* Royal Blue */
+  --color-brand-green: #008148;    /* Emerald Green */
+  --color-brand-pink: #D10068;     /* Rani Pink */
+  --color-brand-gold: #D4AF37;     /* Gold Accent */
+  --color-brand-light: #F9F7F1;    /* Soft Off-White Background */
+  
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-serif: 'Playfair Display', serif;
+}
+
+@layer base {
+  body {
+    @apply bg-brand-light text-gray-900 font-sans antialiased;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif text-brand-blue;
+  }
+}
+
+/* Custom Utilities for Glassmorphism & Animations */
+@layer utilities {
+  .glass-panel {
+    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-lg;
+  }
+  
+  .btn-primary {
+    @apply bg-brand-pink hover:bg-brand-pink/90 text-white font-semibold py-3 px-8 rounded-full transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-brand-pink focus:ring-offset-2;
+  }
+  
+  .btn-outline {
+    @apply bg-transparent border-2 border-brand-gold text-brand-gold hover:bg-brand-gold hover:text-white font-semibold py-3 px-8 rounded-full transition-all duration-300;
+  }
+}
+
+/* Animations */
+@keyframes fade-in-up {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.8s ease-out forwards;
+}
