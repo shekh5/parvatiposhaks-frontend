@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const getErrorMessage = (error, fallbackMessage) => {
     const responseData = error.response?.data;
@@ -24,7 +25,7 @@ export const registerUser = createAsyncThunk("user/register", async (userData, {
 
     } catch (error) {
         const errorMsg = getErrorMessage(error, "registration failed. Please try again.")
-        return rejectWithValue({ message: errorMsg })
+        return rejectWithValue({ message: errorMsg, statusCode: error.response?.status })
     }
 })
 
@@ -42,7 +43,7 @@ export const loginUser = createAsyncThunk("user/login", async ({ email, password
 
     } catch (error) {
         const errorMsg = getErrorMessage(error, "login failed. Please try again.")
-        return rejectWithValue({ message: errorMsg })
+        return rejectWithValue({ message: errorMsg, statusCode: error.response?.status })
     }
 })
 
@@ -60,7 +61,7 @@ export const forgotPassword = createAsyncThunk("user/forgotPassword", async ({ e
 
     } catch (error) {
         const errorMsg = getErrorMessage(error, "Something went wrong. Please try again.")
-        return rejectWithValue({ message: errorMsg })
+        return rejectWithValue({ message: errorMsg, statusCode: error.response?.status })
     }
 })
 
@@ -70,7 +71,7 @@ export const loadUser = createAsyncThunk("user/loadUser", async (_, { rejectWith
         return data
     } catch (error) {
         const errorMsg = getErrorMessage(error, "Failed to load user data. Please try again.")
-        return rejectWithValue({ message: errorMsg })
+        return rejectWithValue({ message: errorMsg, statusCode: error.response?.status })
     }
 })
 
@@ -80,7 +81,7 @@ export const logoutUser = createAsyncThunk("user/logout", async (_, { rejectWith
         return data
     } catch (error) {
         const errorMsg = getErrorMessage(error, "Logout failed. Please try again.")
-        return rejectWithValue({ message: errorMsg })
+        return rejectWithValue({ message: errorMsg, statusCode: error.response?.status })
     }
 })
 
@@ -97,7 +98,7 @@ export const updateProfile = createAsyncThunk("user/updateProfile", async (userD
 
     } catch (error) {
         const errorMsg = getErrorMessage(error, "Failed to update profile. Please try again.")
-        return rejectWithValue({ message: errorMsg })
+        return rejectWithValue({ message: errorMsg, statusCode: error.response?.status })
     }
 })
 
@@ -114,7 +115,7 @@ export const updatePassword = createAsyncThunk("user/updatePassword", async (pas
 
     } catch (error) {
         const errorMsg = getErrorMessage(error, "Failed to update password. Please try again.")
-        return rejectWithValue({ message: errorMsg })
+        return rejectWithValue({ message: errorMsg, statusCode: error.response?.status })
     }
 })
 
@@ -131,7 +132,7 @@ export const resetPassword = createAsyncThunk("user/resetPassword", async ({ tok
 
     } catch (error) {
         const errorMsg = getErrorMessage(error, "Failed to reset password. Please try again.")
-        return rejectWithValue({ message: errorMsg })
+        return rejectWithValue({ message: errorMsg, statusCode: error.response?.status })
     }
 })
 
@@ -239,11 +240,13 @@ const userSlice = createSlice({
                 state.user = null
                 state.isAuthenticated = false
 
+                // Clear LocalStorage on any load error (Option A)
+                localStorage.removeItem('user')
+                localStorage.removeItem('isAuthenticated')
+
+                // Show toast alert on explicit token expiration (Option B)
                 if (action.payload?.statusCode === 401) {
-                    state.user = null;
-                    state.isAuthenticated = false;
-                    localStorage.removeItem('user')
-                    localStorage.removeItem('isAuthenticated')
+                    toast.error("Your session has expired. Please log in again.");
                 }
             })
 
