@@ -1,18 +1,12 @@
 import { useSelector } from 'react-redux';
-import '../componentStyles/Pagination.css';
+import { ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material';
 
 export function Pagination({
   currentPage,
   onPageChange,
-  activeClass = 'active',
-  nextPageText = 'Next',
-  prevPageText = 'Prev',
-  firstPageText = 'First',
-  lastPageText = 'Last',
 }) {
-  const { totalPages, products } = useSelector((state) => {
-    return state.products;
-  });
+  const { totalPages, products } = useSelector((state) => state.products);
+  
   if (products.length === 0 || totalPages <= 1) return null;
 
   const getPageNumbers = () => {
@@ -29,45 +23,39 @@ export function Pagination({
   };
 
   return (
-    <>
-      <div className="pagination">
-        {/* first and previous button */}
-        {currentPage > 1 && (
-          <>
-            <button className="pagination-btn" onClick={() => onPageChange(1)}>
-              {firstPageText}
-            </button>
-            <button className="pagination-btn" onClick={() => onPageChange(currentPage - 1)}>
-              {prevPageText}
-            </button>
-          </>
-        )}
+    <div className="flex items-center space-x-2">
+      {/* Previous button */}
+      <button 
+        className={`w-10 h-10 flex items-center justify-center rounded-full border transition-all duration-300 ${currentPage === 1 ? 'border-gray-200 text-gray-400 cursor-not-allowed' : 'border-gray-300 text-brand-blue hover:bg-brand-blue hover:text-white shadow-sm'}`}
+        onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
+        disabled={currentPage === 1}
+      >
+        <ArrowBackIosNew sx={{ fontSize: 16 }} />
+      </button>
 
-        {/* display page numbers button*/}
-        {getPageNumbers().map((number) => (
-          <>
-            <button
-              className={`pagination-btn ${currentPage === number ? activeClass : ''}`}
-              key={number}
-              onClick={() => onPageChange(number)}
-            >
-              {number}
-            </button>
-          </>
-        ))}
+      {/* Page numbers */}
+      {getPageNumbers().map((number) => (
+        <button
+          key={number}
+          className={`w-10 h-10 flex items-center justify-center rounded-full font-medium transition-all duration-300 ${
+            currentPage === number 
+              ? 'bg-brand-blue text-white shadow-md transform scale-110' 
+              : 'bg-white text-gray-700 hover:bg-gray-100 border border-transparent'
+          }`}
+          onClick={() => onPageChange(number)}
+        >
+          {number}
+        </button>
+      ))}
 
-        {/* last and next button */}
-        {currentPage < totalPages && (
-          <>
-            <button className="pagination-btn" onClick={() => onPageChange(totalPages)}>
-              {lastPageText}
-            </button>
-            <button className="pagination-btn" onClick={() => onPageChange(currentPage + 1)}>
-              {nextPageText}
-            </button>
-          </>
-        )}
-      </div>
-    </>
+      {/* Next button */}
+      <button 
+        className={`w-10 h-10 flex items-center justify-center rounded-full border transition-all duration-300 ${currentPage === totalPages ? 'border-gray-200 text-gray-400 cursor-not-allowed' : 'border-gray-300 text-brand-blue hover:bg-brand-blue hover:text-white shadow-sm'}`}
+        onClick={() => currentPage < totalPages && onPageChange(currentPage + 1)}
+        disabled={currentPage === totalPages}
+      >
+        <ArrowForwardIos sx={{ fontSize: 16 }} />
+      </button>
+    </div>
   );
 }
