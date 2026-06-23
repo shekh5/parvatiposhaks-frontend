@@ -8,8 +8,12 @@ import { useState } from 'react';
 const UserDashboard = ({ user }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const [menuVisible, setMenuVisible] = useState(false);
   const { cartItems } = useSelector((state) => state.cart);
+
+  if (!user) return null;
+
   function toggleMenu() {
     setMenuVisible(!menuVisible);
   }
@@ -79,7 +83,7 @@ const UserDashboard = ({ user }) => {
       <div className="dashboard-container">
         <div className="profile-header" onClick={toggleMenu}>
           <img
-            src={user.avatar.url ? user.avatar.url : '/images/profile.png'}
+            src={user?.avatar?.url ? user.avatar.url : '/images/profile.png'}
             alt="User Avatar"
             className="profile-avatar"
           />

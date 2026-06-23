@@ -52,6 +52,26 @@ export function Home() {
             </div>
           </div>
         </section>
+        {/* Newsletter Section */}
+        <section className="py-20 bg-brand-pink text-white">
+          <div className="container mx-auto px-4 lg:px-8 text-center">
+            <h2 className="text-4xl font-serif font-bold tracking-wide mb-4">Join Our Heritage</h2>
+            <p className="text-white/90 max-w-xl mx-auto mb-8 font-light text-lg">
+              Subscribe to our newsletter to receive exclusive offers, new arrival alerts, and style inspiration directly to your inbox.
+            </p>
+            <form className="max-w-md mx-auto flex flex-col sm:flex-row gap-4 justify-center" onSubmit={(e) => { e.preventDefault(); alert('Thank you for subscribing!'); }}>
+              <input 
+                type="email" 
+                placeholder="Enter your email address" 
+                required
+                className="flex-grow bg-white text-gray-800 px-6 py-3 rounded-full focus:outline-none focus:ring-4 focus:ring-brand-gold/50 transition-all"
+              />
+              <button type="submit" className="bg-brand-gold hover:bg-yellow-500 text-white font-bold py-3 px-8 rounded-full transition-colors shadow-md">
+                Subscribe
+              </button>
+            </form>
+          </div>
+        </section>
 
         <TrustBanner />
       </main>

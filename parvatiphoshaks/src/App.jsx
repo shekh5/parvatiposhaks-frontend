@@ -19,16 +19,19 @@ import Shipping from './cart/Shipping.jsx';
 import OrderConfirm from './cart/OrderConfirm.jsx';
 import Payment from './cart/Payment.jsx';
 import PaymentSuccess from './cart/PaymentSuccess.jsx';
+import Contact from './Pages/Contact.jsx';
+import About from './Pages/About.jsx';
 
 function App() {
   const { isAuthenticated, user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isAuthenticated && user) {
+    // Only fetch user on initial mount if authenticated via local storage
+    if (localStorage.getItem('isAuthenticated') === 'true') {
       dispatch(loadUser());
     }
-  }, [dispatch, isAuthenticated, user]);
+  }, [dispatch]);
   console.log('app level auth status', isAuthenticated);
   console.log('app level user data', user);
   return (
@@ -40,6 +43,8 @@ function App() {
           <Route path="/product/:id" element={<ProductDetails />}></Route>
           <Route path="/products" element={<Products />}></Route>
           <Route path="/products/:keyword" element={<Products />}></Route>
+          <Route path="/contact" element={<Contact />}></Route>
+          <Route path="/about" element={<About />}></Route>
           <Route path="/user/register" element={<Register />}></Route>
           <Route path="/user/login" element={<Login />}></Route>
           <Route path="/user/forgot-password" element={<ForgetPassword />}></Route>
@@ -62,7 +67,6 @@ function App() {
           <Route path="/process/payment" element={<ProtectedRoute element={<Payment />} />}></Route>
           <Route path="/success" element={<ProtectedRoute element={<PaymentSuccess />} />}></Route>
         </Routes>
-        {isAuthenticated && <UserDashboard user={user} />}
       </BrowserRouter>
     </>
   );

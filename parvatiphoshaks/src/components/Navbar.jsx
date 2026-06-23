@@ -6,6 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import UserDashboard from '../User/UserDashboard.jsx';
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,7 +14,7 @@ export function Navbar() {
   const [searchQuery, setSearchQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
 
-  const { isAuthenticated } = useSelector((state) => state.user);
+  const { isAuthenticated, user } = useSelector((state) => state.user);
   const { cartItems } = useSelector((state) => state.cart);
   const navigate = useNavigate();
 
@@ -71,10 +72,12 @@ export function Navbar() {
           </Link>
 
           {/* User / Login */}
-          {!isAuthenticated && (
+          {!isAuthenticated ? (
             <Link to="/user/login" className="text-brand-blue hover:text-brand-pink transition-colors hidden sm:block">
               <PersonAddIcon />
             </Link>
+          ) : (
+            <UserDashboard user={user} />
           )}
 
           {/* Mobile Menu Toggle */}

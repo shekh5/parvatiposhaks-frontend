@@ -183,7 +183,7 @@ const userSlice = createSlice({
 
         //Store in localStorage
         localStorage.setItem('user', JSON.stringify(state.user));
-        localStorage.setItem('isAuthenticated', JSON.stringify(state.user));
+        localStorage.setItem('isAuthenticated', 'true');
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
@@ -207,7 +207,7 @@ const userSlice = createSlice({
 
         //Store in localStorage
         localStorage.setItem('user', JSON.stringify(state.user));
-        localStorage.setItem('isAuthenticated', JSON.stringify(state.user));
+        localStorage.setItem('isAuthenticated', 'true');
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;

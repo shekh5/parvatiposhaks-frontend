@@ -2,14 +2,8 @@
   display: flex;
   align-items: center;
   cursor: pointer;
-  padding: 5px 15px;
-  position: fixed;
-  top: 0px;
-  right: 0px;
-  z-index: 1000;
+  position: relative;
   transition: background-color 0.3s ease;
-  margin-right: 40px;
-  margin-bottom: 5px;
 }
 
 .profile-avatar {
@@ -30,11 +24,13 @@
 .menu-options {
   padding: 15px;
   border-radius: 8px;
-  position: fixed;
-  top: 55px;
-  right: 20px;
+  position: absolute;
+  top: 100%;
+  right: 0;
   width: 150px;
   z-index: 1000;
+  background-color: white;
+  border: 1px solid var(--border-color);
 }
 
 .menu-option-btn {
@@ -80,30 +76,4 @@
 .cart-not-empty {
   background-color: var(--primary-light);
   color: var(--text-dark);
-}
-@media (max-width: 1400px) {
-  .profile-header {
-    right: -50px;
-  }
-  .profile-name {
-    font-size: 16px;
-    font-weight: bold;
-    color: var(--text-light);
-  }
-  .menu-options {
-    top: 50px;
-    right: -10px;
-  }
-}
-@media (max-width: 780px) {
-  .profile-header {
-    top: 5px;
-    right: -40px;
-  }
-
-  .profile-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-  }
 }
